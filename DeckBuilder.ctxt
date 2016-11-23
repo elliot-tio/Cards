@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=suit
+comment0.target=void\ createDeckHelper(java.lang.String)
+comment1.params=
+comment1.target=void\ createDeck()
+comment2.params=
+comment2.target=void\ shuffleDeck()
+comment3.params=
+comment3.target=void\ clearDeck()
+comment4.params=
+comment4.target=void\ printDeck()
+numComments=5
