@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.*;
 
 /**
  * Write a description of class Interface here.
@@ -12,7 +13,7 @@ public class Interface extends JPanel
 {
     public Interface() {
         DeckManipulator deck = new DeckManipulator();
-        
+
         this.setPreferredSize(new Dimension(200, 300));
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -23,7 +24,7 @@ public class Interface extends JPanel
         JButton createButt = new JButton("Create a Deck");
         createButt.setToolTipText("Creates a deck of 52 cards");
         this.add(createButt);
-        
+
         class CreateDeckActionListener implements ActionListener {
 
             public void actionPerformed(ActionEvent ae) {
@@ -35,26 +36,95 @@ public class Interface extends JPanel
             }
         }
         createButt.addActionListener(new CreateDeckActionListener());
-        
-        JButton pickTopButt = new JButton("Pick Card from Top");
-        createButt.setToolTipText("Picks a card from the top of the deck, and replaces it at the bottom");
+
+        JButton pickTopButt = new JButton("Pick Card from the Top");
+        pickTopButt.setToolTipText("Picks a card from the top of the deck");
         this.add(pickTopButt);
-        
+
+        JButton pickRandomButt = new JButton("Pick a random Card");
+        pickRandomButt.setToolTipText("Picks a Random card");
+        this.add(pickRandomButt);
+
+        JButton pickBottomButt = new JButton("Pick a Card from the Bottom");
+        pickBottomButt.setToolTipText("Picks a card from the bottom of the deck");
+        this.add(pickBottomButt);
+
+        JButton pickPositionButt = new JButton("Pick a Card from a Position");
+        pickPositionButt.setToolTipText("Picks a Card from a specified position");
+        this.add(pickPositionButt);
+
         final JLabel currCardLab = new JLabel("No Current Card Available");
         currCardLab.setBorder(BorderFactory.createEtchedBorder());
         this.add(currCardLab);
-        
-        class PickTopActionListener implements ActionListener {
 
+        class PickCardActionListener implements ActionListener {
+            int n = 0;
             public void actionPerformed(ActionEvent ae) {
+
                 if (deck.checkDeck()){
-                    deck.pickCardFromTop(); 
-                    currCardLab.setText(deck.currentCard.getValue() + " of " + deck.currentCard.getSuit());
+                    if (ae.getSource() == pickTopButt) {
+                        deck.pickCardFromTop(); 
+                    } else if (ae.getSource() == pickRandomButt) {
+                        deck.pickCardFromRandom();
+                    } else if (ae.getSource() == pickBottomButt) {
+                        deck.pickCardFromBottom();
+                    } 
+                    // else if (ae.getSource() == pickPositionButt) {
+                    //                         this.n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position: "));
+                    //                         if (n < 0 || n > 51) {
+                    //                             JOptionPane.showMessageDialog(null, "Your number is invalid.");
+                    //                             while (n < 0 || n > 51) {
+                    //                                 this.n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position: "));
+                    //                                 System.out.println(n);
+                    //                             }
+                    //                             System.out.println(n);
+                    //                         } else {
+                    //                             deck.pickCardFromPosition(this.n);
+                    //                         }
+                    //                 }
+                    currCardLab.setText("Current card: " + deck.currentCard.getValue() + " of " + deck.currentCard.getSuit());
                 }
             }
         }
-        pickTopButt.addActionListener(new PickTopActionListener());
-        
+        pickTopButt.addActionListener(new 
+            PickCardActionListener());
+        pickRandomButt.addActionListener(new 
+            PickCardActionListener());
+        pickBottomButt.addActionListener(new 
+            PickCardActionListener());
+        //         pickPositionButt.addActionListener(new 
+        //         PickCardActionListener());
+
+        JButton shuffleButt = new JButton("Shuffle Deck");
+        createButt.setToolTipText("Shuffles the deck");
+        this.add(shuffleButt);
+
+        class ShuffleActionListener implements ActionListener {
+
+            public void actionPerformed(ActionEvent ae) {
+                if (deck.checkDeck()){
+                    deck.shuffleDeck(); 
+                }
+            }
+        }
+        shuffleButt.addActionListener(new ShuffleActionListener());
+
+        JButton clearButt = new JButton("Clear Deck");
+        createButt.setToolTipText("Discard current deck");
+        this.add(clearButt);
+
+        class ClearActionListener implements ActionListener {
+
+            public void actionPerformed(ActionEvent ae) {
+                if (deck.checkDeck()) {
+                    deck.clearDeck();
+                    deckLab.setText("No Deck Available");
+                    currCardLab.setText("No Current Card Available");
+                }
+            }
+        }
+        clearButt.addActionListener(new ClearActionListener());
+
     }
 
     public static void main(String[] args) {
@@ -65,6 +135,7 @@ public class Interface extends JPanel
         f.add(new Interface());
 
         f.pack();
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
     }
 }
