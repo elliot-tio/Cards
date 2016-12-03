@@ -51,13 +51,4 @@ public class DeckManipulator extends DeckBuilder
         pickCard(position);
     }
 
-    public void displayCurrentCard() {
-
-        if (currentCard == null) {
-            System.out.println("Please pick a card.");
-        } else {
-            System.out.println(currentCard.printCard());
-        }
-
-    }
 }

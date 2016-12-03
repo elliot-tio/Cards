@@ -21,6 +21,10 @@ public class Interface extends JPanel
         deckLab.setBorder(BorderFactory.createEtchedBorder());
         this.add(deckLab);
 
+        final JLabel currCardLab = new JLabel("No Current Card Available");
+        currCardLab.setBorder(BorderFactory.createEtchedBorder());
+        this.add(currCardLab);
+
         JButton createButt = new JButton("Create a Deck");
         createButt.setToolTipText("Creates a deck of 52 cards");
         this.add(createButt);
@@ -33,6 +37,7 @@ public class Interface extends JPanel
                 invalidate();
                 validate();
                 repaint();
+                currCardLab.setText("No Current Card Available");
             }
         }
         createButt.addActionListener(new CreateDeckActionListener());
@@ -53,10 +58,6 @@ public class Interface extends JPanel
         pickPositionButt.setToolTipText("Picks a Card from a specified position");
         this.add(pickPositionButt);
 
-        final JLabel currCardLab = new JLabel("No Current Card Available");
-        currCardLab.setBorder(BorderFactory.createEtchedBorder());
-        this.add(currCardLab);
-
         class PickCardActionListener implements ActionListener {
             int n = 0;
             public void actionPerformed(ActionEvent ae) {
@@ -69,19 +70,23 @@ public class Interface extends JPanel
                     } else if (ae.getSource() == pickBottomButt) {
                         deck.pickCardFromBottom();
                     } 
-                    // else if (ae.getSource() == pickPositionButt) {
-                    //                         this.n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position: "));
-                    //                         if (n < 0 || n > 51) {
-                    //                             JOptionPane.showMessageDialog(null, "Your number is invalid.");
-                    //                             while (n < 0 || n > 51) {
-                    //                                 this.n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position: "));
-                    //                                 System.out.println(n);
-                    //                             }
-                    //                             System.out.println(n);
-                    //                         } else {
-                    //                             deck.pickCardFromPosition(this.n);
-                    //                         }
-                    //                 }
+                    else if (ae.getSource() == pickPositionButt) {
+                        boolean done = false;
+                        while(!done) {
+                            try {
+                                n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position (0 - 51): "));
+                                if (n < 0 || n > 51) {
+                                    JOptionPane.showMessageDialog(null, "Your number is invalid.", "Value Error", JOptionPane.ERROR_MESSAGE);
+                                    continue;
+                                } else {
+                                    deck.pickCardFromPosition(n);
+                                }
+                                done = true;
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(null, "Please enter a number value.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
                     currCardLab.setText("Current card: " + deck.currentCard.getValue() + " of " + deck.currentCard.getSuit());
                 }
             }
@@ -92,8 +97,8 @@ public class Interface extends JPanel
             PickCardActionListener());
         pickBottomButt.addActionListener(new 
             PickCardActionListener());
-        //         pickPositionButt.addActionListener(new 
-        //         PickCardActionListener());
+        pickPositionButt.addActionListener(new 
+            PickCardActionListener());
 
         JButton shuffleButt = new JButton("Shuffle Deck");
         createButt.setToolTipText("Shuffles the deck");

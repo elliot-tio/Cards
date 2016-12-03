@@ -9,14 +9,14 @@ import java.util.Collections;
  */
 public class DeckBuilder
 {
-    public ArrayList<Card> deck = new ArrayList<Card>(51);
-   
+    protected ArrayList<Card> deck = new ArrayList<Card>(51);
+
     private void createDeckHelper(String suit) {
         for (int i = 1; i < 14; i++) {
             deck.add(new Card(i, suit));
         }
     }
-    
+
     protected void createDeck() {
         this.clearDeck();
         createDeckHelper("Spades");
@@ -24,17 +24,17 @@ public class DeckBuilder
         createDeckHelper("Hearts");
         createDeckHelper("Clubs");
     }
-    
+
     protected void shuffleDeck() {
         Collections.shuffle(deck);
     }
-    
+
     protected void clearDeck() {
         deck.clear();
     }
 
     protected void printDeck() {
-        
+
         if (deck.size() == 0) {
             System.out.println("Please create a deck first.");
         }
