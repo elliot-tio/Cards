@@ -14,7 +14,7 @@ public class Interface extends JPanel
     public Interface() {
         DeckManipulator deck = new DeckManipulator();
 
-        this.setPreferredSize(new Dimension(200, 300));
+        this.setPreferredSize(new Dimension(230, 400));
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         final JLabel deckLab = new JLabel("No Deck Available");
@@ -24,10 +24,18 @@ public class Interface extends JPanel
         final JLabel currCardLab = new JLabel("No Current Card Available");
         currCardLab.setBorder(BorderFactory.createEtchedBorder());
         this.add(currCardLab);
+        
+        final JLabel discardPileTopLab = new JLabel("Discard Pile Empty");
+        discardPileTopLab.setBorder(BorderFactory.createEtchedBorder());
+        this.add(discardPileTopLab);
 
         JButton createButt = new JButton("Create a Deck");
         createButt.setToolTipText("Creates a deck of 52 cards");
         this.add(createButt);
+        
+        JButton toggleDiscardButt = new JButton("Discard pile: Enable");
+        toggleDiscardButt.setToolTipText("Enables or disables the discard pile");
+        this.add(toggleDiscardButt);
 
         class CreateDeckActionListener implements ActionListener {
 
@@ -38,9 +46,23 @@ public class Interface extends JPanel
                 validate();
                 repaint();
                 currCardLab.setText("No Current Card Available");
+                discardPileTopLab.setText("Discard Pile Empty");
             }
         }
         createButt.addActionListener(new CreateDeckActionListener());
+        
+        class ToggleDiscardActionListener implements ActionListener {
+            public void actionPerformed(ActionEvent ae) {
+                if (toggleDiscardButt.getText().equals("Discard pile: Enable")) {
+                    deck.discard = true;
+                    toggleDiscardButt.setText("Discard pile: Disable");
+                } else {
+                    deck.discard = false;
+                    toggleDiscardButt.setText("Discard pile: Enable");
+                }
+            }
+        }
+        toggleDiscardButt.addActionListener(new ToggleDiscardActionListener());
 
         JButton pickTopButt = new JButton("Pick Card from the Top");
         pickTopButt.setToolTipText("Picks a card from the top of the deck");
@@ -74,8 +96,9 @@ public class Interface extends JPanel
                         boolean done = false;
                         while(!done) {
                             try {
-                                n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position (0 - 51): "));
-                                if (n < 0 || n > 51) {
+                                // fix onCancel action, break loop and continue as if did not want to pick
+                                n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position (0 - " + (deck.deck.size() - 1) + "): "));
+                                if (n < 0 || n > deck.deck.size() - 1) {
                                     JOptionPane.showMessageDialog(null, "Your number is invalid.", "Value Error", JOptionPane.ERROR_MESSAGE);
                                     continue;
                                 } else {
@@ -88,6 +111,9 @@ public class Interface extends JPanel
                         }
                     }
                     currCardLab.setText("Current card: " + deck.currentCard.getValue() + " of " + deck.currentCard.getSuit());
+                    if(deck.discard) {
+                       discardPileTopLab.setText(deck.discardPile.peek().getValue() + " of " + deck.discardPile.peek().getSuit());
+                    }
                 }
             }
         }

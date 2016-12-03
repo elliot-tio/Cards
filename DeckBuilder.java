@@ -9,7 +9,8 @@ import java.util.Collections;
  */
 public class DeckBuilder
 {
-    protected ArrayList<Card> deck = new ArrayList<Card>(51);
+    protected ArrayList<Card> deck = new ArrayList<>(51);
+    protected Stack<Card> discardPile = new Stack<>();
 
     private void createDeckHelper(String suit) {
         for (int i = 1; i < 14; i++) {
@@ -19,6 +20,7 @@ public class DeckBuilder
 
     protected void createDeck() {
         this.clearDeck();
+        discardPile.clear();
         createDeckHelper("Spades");
         createDeckHelper("Diamonds");
         createDeckHelper("Hearts");

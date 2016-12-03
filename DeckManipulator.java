@@ -13,16 +13,21 @@ public class DeckManipulator extends DeckBuilder
 
     protected Card currentCard;
     Random random = new Random();
+    protected boolean discard = false;
 
     private void pickCard(int position) {
         currentCard = new Card(deck.get(position).getValue(), deck.get(position).getSuit());
         deck.remove(position);
         // replace card to bottom of pile
-        deck.add(currentCard);
+        if (!discard) {
+            deck.add(currentCard);
+        } else {
+            discardPile.push(currentCard);
+        }
     }
 
     protected boolean checkDeck() {
-        if (deck.size() == 0) { JOptionPane.showMessageDialog(null, "Please create a deck.", "Deck Error", JOptionPane.ERROR_MESSAGE); return false; }
+        if (deck.size() == 0) { JOptionPane.showMessageDialog(null, "Deck is empty.", "Deck Error", JOptionPane.ERROR_MESSAGE); return false; }
         return true;
     }
 
@@ -40,11 +45,11 @@ public class DeckManipulator extends DeckBuilder
 
     public void pickCardFromRandom() {
         // pick a random number from 0 - 51, then pick a card from that position
-        pickCard(random.nextInt(51));
+        pickCard(random.nextInt(deck.size()));
     }
 
     public void pickCardFromBottom() {
-        pickCard(51);
+        pickCard(deck.size() - 1);
     }
 
     public void pickCardFromPosition(int position) {
