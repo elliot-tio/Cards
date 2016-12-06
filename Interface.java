@@ -70,7 +70,7 @@ public class Interface extends JPanel
         this.add(pickTopButt);
 
         JButton pickRandomButt = new JButton("Pick a random Card");
-        pickRandomButt.setToolTipText("Picks a Random card");
+        pickRandomButt.setToolTipText("Picks a random card from the deck");
         this.add(pickRandomButt);
 
         JButton pickBottomButt = new JButton("Pick a Card from the Bottom");
@@ -78,7 +78,7 @@ public class Interface extends JPanel
         this.add(pickBottomButt);
 
         JButton pickPositionButt = new JButton("Pick a Card from a Position");
-        pickPositionButt.setToolTipText("Picks a Card from a specified position");
+        pickPositionButt.setToolTipText("Picks a card from the specified position in the deck");
         this.add(pickPositionButt);
 
         class PickCardActionListener implements ActionListener {
@@ -131,7 +131,7 @@ public class Interface extends JPanel
             PickCardActionListener());
 
         JButton shuffleButt = new JButton("Shuffle Deck");
-        createButt.setToolTipText("Shuffles the deck");
+        shuffleButt.setToolTipText("Shuffles the deck");
         this.add(shuffleButt);
 
         class ShuffleActionListener implements ActionListener {
@@ -145,7 +145,7 @@ public class Interface extends JPanel
         shuffleButt.addActionListener(new ShuffleActionListener());
 
         JButton clearButt = new JButton("Clear Deck");
-        createButt.setToolTipText("Discard current deck");
+        clearButt.setToolTipText("Discard current deck");
         this.add(clearButt);
 
         class ClearActionListener implements ActionListener {
