@@ -20,7 +20,6 @@ public class DeckBuilder
 
     protected void createDeck() {
         this.clearDeck();
-        discardPile.clear();
         createDeckHelper("Spades");
         createDeckHelper("Diamonds");
         createDeckHelper("Hearts");
@@ -33,6 +32,7 @@ public class DeckBuilder
 
     protected void clearDeck() {
         deck.clear();
+        discardPile.clear();
     }
 
     protected void printDeck() {

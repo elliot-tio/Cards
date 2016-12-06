@@ -15,24 +15,25 @@ public class Interface extends JPanel
         DeckManipulator deck = new DeckManipulator();
 
         this.setPreferredSize(new Dimension(230, 400));
-        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.setLayout(new GridLayout(11, 1));
+        this.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
-        final JLabel deckLab = new JLabel("No Deck Available");
+        final JLabel deckLab = new JLabel("No Deck Available", SwingConstants.CENTER);
         deckLab.setBorder(BorderFactory.createEtchedBorder());
         this.add(deckLab);
 
-        final JLabel currCardLab = new JLabel("No Current Card Available");
+        final JLabel currCardLab = new JLabel("No Current Card Available", SwingConstants.CENTER);
         currCardLab.setBorder(BorderFactory.createEtchedBorder());
         this.add(currCardLab);
-        
-        final JLabel discardPileTopLab = new JLabel("Discard Pile Empty");
+
+        final JLabel discardPileTopLab = new JLabel("Discard Pile Empty", SwingConstants.CENTER);
         discardPileTopLab.setBorder(BorderFactory.createEtchedBorder());
         this.add(discardPileTopLab);
 
         JButton createButt = new JButton("Create a Deck");
         createButt.setToolTipText("Creates a deck of 52 cards");
         this.add(createButt);
-        
+
         JButton toggleDiscardButt = new JButton("Discard pile: Enable");
         toggleDiscardButt.setToolTipText("Enables or disables the discard pile");
         this.add(toggleDiscardButt);
@@ -50,7 +51,7 @@ public class Interface extends JPanel
             }
         }
         createButt.addActionListener(new CreateDeckActionListener());
-        
+
         class ToggleDiscardActionListener implements ActionListener {
             public void actionPerformed(ActionEvent ae) {
                 if (toggleDiscardButt.getText().equals("Discard pile: Enable")) {
@@ -81,7 +82,6 @@ public class Interface extends JPanel
         this.add(pickPositionButt);
 
         class PickCardActionListener implements ActionListener {
-            int n = 0;
             public void actionPerformed(ActionEvent ae) {
 
                 if (deck.checkDeck()){
@@ -94,15 +94,18 @@ public class Interface extends JPanel
                     } 
                     else if (ae.getSource() == pickPositionButt) {
                         boolean done = false;
+                        String input;
                         while(!done) {
                             try {
-                                // fix onCancel action, break loop and continue as if did not want to pick
-                                n = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter a position (0 - " + (deck.deck.size() - 1) + "): "));
-                                if (n < 0 || n > deck.deck.size() - 1) {
+                                input = JOptionPane.showInputDialog(null, "Enter a position (0 - " + (deck.deck.size() - 1) + "): ");
+                                if (input == null  || input.length() == 0) {
+                                    done = true;
+                                }
+                                else if (Integer.parseInt(input) < 0 || Integer.parseInt(input) > deck.deck.size() - 1) {
                                     JOptionPane.showMessageDialog(null, "Your number is invalid.", "Value Error", JOptionPane.ERROR_MESSAGE);
                                     continue;
                                 } else {
-                                    deck.pickCardFromPosition(n);
+                                    deck.pickCardFromPosition(Integer.parseInt(input));
                                 }
                                 done = true;
                             } catch (NumberFormatException e) {
@@ -110,9 +113,10 @@ public class Interface extends JPanel
                             }
                         }
                     }
-                    currCardLab.setText("Current card: " + deck.currentCard.getValue() + " of " + deck.currentCard.getSuit());
+                    // if there is no current card, this cannot work. find out what current card is initialized as, and make if-else statement
+                    if (deck.currentCard != null) { currCardLab.setText("Current card: " + deck.currentCard.getValue() + " of " + deck.currentCard.getSuit()); }
                     if(deck.discard) {
-                       discardPileTopLab.setText(deck.discardPile.peek().getValue() + " of " + deck.discardPile.peek().getSuit());
+                        discardPileTopLab.setText(deck.discardPile.peek().getValue() + " of " + deck.discardPile.peek().getSuit());
                     }
                 }
             }
@@ -161,7 +165,7 @@ public class Interface extends JPanel
     public static void main(String[] args) {
         JFrame f = new JFrame("Cards Master");
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.setLayout(new FlowLayout());
+        f.setLayout(new GridLayout());
 
         f.add(new Interface());
 
